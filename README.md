@@ -12,7 +12,7 @@ One 30-second story, *Aarav's walk-in interview day with Trinexa*, made five way
 | 4 | 3D: Blender 4.5 + CC0 rigged characters | [`results/blender.mp4`](results/blender.mp4) | Fully controllable and consistent, but game-style |
 | 5 | Talking narrator: SadTalker lip-sync | [`results/narrator.mp4`](results/narrator.mp4) | Good presenter bubble; head movement only |
 
-📝 **Blog post:** https://kartikjindal.github.io/local-character-video-5-methods-benchmark/blog/ · ▶ **Live dashboard:** https://kartikjindal.github.io/local-character-video-5-methods-benchmark/
+📝 **Read the write-up:** [Blog](https://kartikjindal.github.io/local-character-video-5-methods-benchmark/blog/) · [Medium](https://medium.com/@kartikjindal58/real-looking-people-in-a-product-video-for-0-on-a-macbook-i-tested-5-methods-bd121b83f980) · [dev.to](https://dev.to/kartikjindal/real-looking-people-in-a-product-video-for-0-on-a-macbook-i-tested-5-methods-121o) · ▶ **[Live dashboard](https://kartikjindal.github.io/local-character-video-5-methods-benchmark/)**
 
 📄 **Full measured report, with timings, GPU vs CPU, bottlenecks and scores: [REPORT.md](REPORT.md)**
 
