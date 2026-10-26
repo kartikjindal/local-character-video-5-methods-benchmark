@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Real-looking people in a product video, for $0, on a MacBook: I tested 5 methods</title>
+<meta name="description" content="Stock vs SDXL vs LTX-Video vs Blender vs SadTalker on an M1 Max: code, measured timings, pitfalls and a decision guide.">
+<meta name="author" content="Kartik Jindal">
+<meta property="article:published_time" content="2026-10-26T12:00:00Z">
+<link rel="canonical" href="https://kartikjindal.github.io/local-character-video-5-methods-benchmark/blog/">
+<style>body{max-width:740px;margin:40px auto;padding:0 20px;font:18px/1.7 Georgia,serif;color:#1b1f27}img{max-width:100%}pre{background:#f4f2ec;padding:14px;overflow-x:auto;font:14px Menlo,monospace}code{background:#f4f2ec;padding:1px 4px}</style>
+</head><body><article>
+<h1>Real-looking people in a product video, for $0, on a MacBook: I tested 5 methods</h1>
+<p><em>By Kartik Jindal · 26 October 2026</em></p>
+<h2>TL;DR</h2>
+<ul>
+<li>I made the <strong>same 30-second story five ways</strong> to find the best <em>free, local</em> way to put real-looking people in a product video: free stock, AI images (SDXL), AI video (LTX-Video), Blender 3D and a lip-synced AI narrator.</li>
+<li>Everything ran on <strong>one MacBook Pro (M1 Max, 64 GB), cost $0</strong>, and used about 28 GB of models.</li>
+<li><strong>The winner is AI images with SDXL:</strong> realistic, consistent characters at <strong>~2 min per shot</strong> on the Mac GPU.</li>
+<li><strong>AI video (LTX-Video)</strong> is the only method where people truly move, but it took <strong>11–26 min per 5-second clip</strong>, and crowds and big motion melt.</li>
+<li><strong>Surprise:</strong> the video model <em>generates</em> a clip in ~30 s. The other 95% of the time is decoding plus memory swap.</li>
+<li>Everything is open: <a href="https://kartikjindal.github.io/local-character-video-5-methods-benchmark/">live side-by-side dashboard</a> · <a href="https://github.com/kartikjindal/local-character-video-5-methods-benchmark">repo with inputs, outputs, scripts and logs</a> · <a href="https://github.com/kartikjindal/local-character-video-5-methods-benchmark/blob/main/REPORT.md">full report</a></li>
+</ul>
+<p><img src="https://kartikjindal.github.io/local-character-video-5-methods-benchmark/docs/comparison.jpg" alt="Same story, five ways. Rows: free stock, AI images, AI video, Blender 3D, talking narrator">
+<em>Same 30-second story, five ways. Rows top to bottom: free stock · AI images (SDXL) · AI video (LTX-Video) · Blender 3D · talking narrator (SadTalker). Columns are the five shots.</em></p>
+<p>▶ <strong>Watch all five 30-second videos side by side:</strong> <a href="https://kartikjindal.github.io/local-character-video-5-methods-benchmark/">kartikjindal.github.io/local-character-video-5-methods-benchmark</a></p>
+<h2>Who this is for</h2>
+<p>You make product demos, explainers or launch videos with code, an editor or a tool like Remotion or HyperFrames. Your app screens look great, but there are <strong>no humans</strong>: no customer, no user, no story. You want people in the video, you don&#39;t want to pay for footage or an AI video subscription, and you have a decent Mac.</p>
+<p>By the end you&#39;ll know:</p>
+<ul>
+<li>which of the five free methods to use for which shot;</li>
+<li>what each one really costs in time on Apple Silicon, and why;</li>
+<li>the exact settings, prompts and patches that made them work, including the errors you&#39;ll hit and their fixes.</li>
+</ul>
+<h2>The problem</h2>
+<p>My explainer videos had a recurring hole. The product screens were sharp, but every &quot;real world&quot; moment (a candidate arriving, a phone buzzing, an interview) was a silhouette or an icon. Viewers connect with <strong>people</strong>. The usual answers are paid stock footage, a paid AI video tool, or filming. I wanted to know how far <strong>free and local</strong> gets you in 2026.</p>
+<h2>How I tested (methodology)</h2>
+<p>The rule: one story, five methods, and only the people change.</p>
+<p>The story: Aarav gets a QR call letter for a walk-in interview → scans in at reception → waits in a lounge until his phone buzzes → interviews → his record is handed off to the company&#39;s HR system. That&#39;s 5 shots, 30.4 seconds in total.</p>
+<p><strong>Fairness controls.</strong> Every version shares:</p>
+<ul>
+<li>the same storyboard and shot timings (6.5 / 5.3 / 6.5 / 5.7 / 6.4 s);</li>
+<li>the same narration (Kokoro TTS, voice <code>am_michael</code>, generated locally);</li>
+<li>the same app overlay cards and the same music bed;</li>
+<li>the same assembly template, rendered with HyperFrames (HTML + GSAP → MP4) at 1080p.</li>
+</ul>
+<p><strong>Hardware.</strong> MacBook Pro, <strong>Apple M1 Max</strong>: 10-core CPU (8 performance + 2 efficiency), <strong>32-core GPU</strong>, <strong>64 GB</strong> of unified memory, macOS 26.5. There&#39;s no NVIDIA GPU, so &quot;GPU&quot; means the Apple GPU through PyTorch&#39;s <code>mps</code> backend or Blender&#39;s Metal renderer. I left my normal apps open (an IDE, a Linux VM, an editor), which turned out to matter.</p>
+<p><strong>What I measured.</strong></p>
+<ul>
+<li>Wall-clock time per step, from logs.</li>
+<li>Which device each step ran on.</li>
+<li>Memory and swap.</li>
+<li>Seven quality criteria scored 1–5: realism, character consistency, motion, story fit, speed, reliability and licence clarity.</li>
+</ul>
+<h2>Prerequisites</h2>
+<ul>
+<li><strong>Apple Silicon Mac, ideally 32 GB+ of RAM</strong>: The AI video model needs ~25 GB of working memory in fp32</li>
+<li><strong>~30 GB of free disk</strong>: Model weights</li>
+<li><strong>Python 3.10 <strong>and</strong> 3.11, <a href="https://github.com/astral-sh/uv">uv</a>, ffmpeg</strong>: Two separate environments; SadTalker needs old pinned libraries</li>
+<li><strong>Blender 4.5</strong>: Method 4. Use the blender.org DMG; the Homebrew cask asks for sudo</li>
+<li><strong>Node 18+</strong>: <code>npx hyperframes</code> for the final assembly (any editor works)</li>
+</ul>
+<p>The models and their download sizes:</p>
+<ul>
+<li><a href="https://huggingface.co/SG161222/RealVisXL_V4.0">RealVisXL V4</a> (SDXL, fp16) + <a href="https://huggingface.co/madebyollin/sdxl-vae-fp16-fix">fp16-fix VAE</a>: AI images, 7.3 GB, licence Open RAIL++-M</li>
+<li><a href="https://huggingface.co/Lightricks/LTX-Video-0.9.5">LTX-Video 0.9.5</a> transformer + VAE: AI video, 6.3 GB, licence Open RAIL-M</li>
+<li><a href="https://huggingface.co/city96/t5-v1_1-xxl-encoder-bf16">T5-XXL encoder, bf16 copy</a>: LTX text encoder, 9.5 GB (instead of 19 GB), licence Apache-2.0</li>
+<li><a href="https://github.com/OpenTalker/SadTalker">SadTalker</a> + GFPGAN weights: Narrator, 1.7 GB, licence Apache-2.0</li>
+<li><a href="https://quaternius.com">Quaternius</a> animated characters: Blender, small, licence CC0</li>
+</ul>
+<h2>Method 1: free stock photos</h2>
+<p><strong>How it works.</strong> Search Wikimedia Commons (its API needs no key) and Openverse for each shot. Filter licences to CC0, CC BY and CC BY-SA (never NC or ND), crop to 16:9, and add a slow camera push.</p>
+<pre>curl -s &quot;https://commons.wikimedia.org/w/api.php?action=query&amp;list=search&amp;srnamespace=6&amp;srsearch=filetype:video%20job%20interview&amp;format=json&quot;</pre>
+<p><strong>Result.</strong> No usable free <em>video</em> exists for offices, receptions or interviews: the hits are under 720p or are news footage. So all five shots became <strong>photos</strong>. Each shot shows a different person, most aren&#39;t Indian, the &quot;lounge&quot; is a bus terminal, and in shot 1 we only see the back of a head.</p>
+<p><strong>Time:</strong> ~22 min of searching and reviewing. <strong>GPU:</strong> none.
+<strong>Verdict:</strong> real, and legally clean with attribution, but it can&#39;t tell <em>your</em> story with <em>your</em> character. Pexels has much better free video, but needs an API key.</p>
+<h2>Method 2: AI images with SDXL (the winner)</h2>
+<p><strong>How it works.</strong> Write one fixed character description and reuse it in every shot prompt. Fix the seeds, generate 2 options per shot, and pick the best.</p>
+<pre>AARAV = &quot;Aarav, a 26 year old Indian man, short neat black hair, light stubble, navy blazer over a white shirt&quot;<br>STYLE = &quot;photorealistic, candid documentary photo, 35mm lens, natural light, shallow depth of field, ...&quot;<br><br>vae  = AutoencoderKL.from_pretrained(&quot;madebyollin/sdxl-vae-fp16-fix&quot;, torch_dtype=torch.float16)<br>pipe = StableDiffusionXLPipeline.from_pretrained(&quot;SG161222/RealVisXL_V4.0&quot;, vae=vae,<br>                                                 torch_dtype=torch.float16, variant=&quot;fp16&quot;).to(&quot;mps&quot;)<br>pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config, use_karras_sigmas=True)<br>img = pipe(f&quot;{AARAV}, sitting on a sofa ... looking down at his smartphone, {STYLE}&quot;,<br>           negative_prompt=NEG, width=1344, height=768, num_inference_steps=30,<br>           guidance_scale=5.5, generator=torch.Generator(&quot;cpu&quot;).manual_seed(1000)).images[0]</pre>
+<p>The <strong>fp16-fix VAE</strong> matters: the stock SDXL VAE in fp16 on Apple GPUs tends to decode black or NaN images.</p>
+<p><img src="https://kartikjindal.github.io/local-character-video-5-methods-benchmark/docs/aistill-candidates.jpg" alt="All 10 SDXL candidates, two per shot">
+<em>All 10 candidates, two per shot. Choosing took seconds.</em></p>
+<p><strong>Result.</strong> These look like candid office photos, and Aarav is recognisably the same person in most shots. <strong>Weaknesses:</strong></p>
+<ul>
+<li>In the busy interview scene his identity drifted (glasses and a beard appeared).</li>
+<li>Prompts are followed loosely: no receptionist actually scans his phone.</li>
+<li>The images are stills, so motion comes only from the camera.</li>
+</ul>
+<p><strong>Time:</strong> <strong>108–131 s per 1344×768 image</strong> (average 119 s), so 16 images took ~28 min. <strong>GPU:</strong> yes (MPS, fp16).
+<strong>Verdict:</strong> ⭐ the best realism per minute.</p>
+<h2>Method 3: AI video with LTX-Video (alive, but fragile)</h2>
+<p><strong>How it works.</strong> Animate the method 2 stills with LTX-Video 0.9.5 image-to-video, prompting only the <em>motion</em>. Two memory tricks are essential on a Mac:</p>
+<pre>pipe = LTXImageToVideoPipeline.from_pretrained(&quot;Lightricks/LTX-Video-0.9.5&quot;,<br>                                               text_encoder=None, torch_dtype=torch.float32)<br># 1) encode every prompt once on the CPU, then drop the 19 GB text encoder before generating<br>pipe.text_encoder = T5EncoderModel.from_pretrained(&quot;city96/t5-v1_1-xxl-encoder-bf16&quot;, torch_dtype=torch.float32)<br>emb = {s: pipe.encode_prompt(MOTION[s], NEG, do_classifier_free_guidance=True, device=&quot;cpu&quot;) for s in shots}<br>pipe.text_encoder = None; gc.collect()<br>pipe.to(&quot;mps&quot;); pipe.vae.enable_tiling()          # 2) tiled decoding<br><br>pe, pm, ne, nm = (t.to(&quot;mps&quot;) for t in emb[&quot;s1&quot;])<br>frames = pipe(image=still, prompt_embeds=pe, prompt_attention_mask=pm,<br>              negative_prompt_embeds=ne, negative_prompt_attention_mask=nm,<br>              width=768, height=448, num_frames=121, num_inference_steps=30, guidance_scale=3.0,<br>              generator=torch.Generator(&quot;mps&quot;).manual_seed(42)).frames[0]</pre>
+<p><strong>Result.</strong> For <strong>one person with small motion it&#39;s genuinely convincing:</strong> Aarav smiles at his phone, and in the interview he talks and gestures while the panel listens.</p>
+<p><img src="https://kartikjindal.github.io/local-character-video-5-methods-benchmark/docs/aivideo-s4-good.jpg" alt="Interview clip: natural talking and gesturing">
+<em>The interview clip at 0 s, 2.5 s and 5 s: natural talking and gesturing.</em></p>
+<p><strong>Crowds and big motion break it.</strong> The busy reception melts into a blur after ~3 s, and walking out of the building warps his body.</p>
+<p><img src="https://kartikjindal.github.io/local-character-video-5-methods-benchmark/docs/aivideo-s2-melt.jpg" alt="Reception clip: fine at 0s, morphing at 2.5s, melted at 5s">
+<em>The reception clip at 0 s, 2.5 s and 5 s: the crowd melts.</em></p>
+<p>I rescued those two clips by keeping the clean first ~3 s and playing them forward then backward (<code>ffmpeg ... trim,split,reverse,concat</code>). The raw clips are in the repo.</p>
+<p><strong>Time:</strong></p>
+<ul>
+<li>Quick test (49 frames, 20 steps): 278 s.</li>
+<li>Full clips (121 frames ≈ 5 s, 30 steps): <strong>811, 681, 1,568, 1,381 and 804 s</strong>, ~87 min for all five.</li>
+</ul>
+<p><strong>GPU:</strong> yes (MPS, <strong>fp32</strong>; see the pitfalls).
+<strong>Verdict:</strong> use it for 2–3 hero moments, not a whole film.</p>
+<h2>Method 4: Blender 3D with free rigged characters</h2>
+<p><strong>How it works.</strong></p>
+<ul>
+<li>Download CC0 rigged and animated characters (Quaternius, via Poly Pizza; no login).</li>
+<li>Recolour them to match the cast and build sets from primitives.</li>
+<li>Script every shot in Blender Python and render headless with EEVEE on the GPU:</li>
+</ul>
+<pre>~/Applications/Blender.app/Contents/MacOS/Blender -b -P shots.py -- s1 full 1920 1080 24</pre>
+<p><strong>Result.</strong> <strong>Every shot does exactly what the storyboard asks.</strong> He holds the phone to the scanner, the phone buzzes, he walks out, and nobody is stuck in a T-pose. But it looks like a video game:</p>
+<ul>
+<li>faces have no expressions and there&#39;s no lip-sync;</li>
+<li>the same three base models are reused for everyone;</li>
+<li>the sets are untextured.</li>
+</ul>
+<p>Realistic free 3D humans are hard to get: Mixamo needs an Adobe login, and MetaHuman and Character Creator aren&#39;t free.</p>
+<p><strong>Time:</strong> ~35 min in total, of which <strong>14 min</strong> was rendering 878 frames at 1080p. <strong>GPU:</strong> yes (Metal, EEVEE).
+<strong>Verdict:</strong> total control and consistency, but no realism.</p>
+<h2>Method 5: a talking AI narrator with SadTalker</h2>
+<p><strong>How it works.</strong></p>
+<ol>
+<li>Generate a fictional presenter face with SDXL (method 2).</li>
+<li>Lip-sync it to the full narration with SadTalker.</li>
+<li>Clean up the face with GFPGAN.</li>
+<li>Show it as a corner bubble.</li>
+</ol>
+<pre>python inference.py --driven_audio narration.wav --source_image presenter.png \<br>  --still --preprocess crop --enhancer gfpgan --size 256</pre>
+<p><strong>Result.</strong> The lip-sync is frame-accurate across the full 30 s, but only the head moves, and at 512×512 it only works small. <strong>Match the face to the voice:</strong> my first presenter was a woman against a male voice, and it looked wrong.</p>
+<p><strong>Time:</strong></p>
+<ul>
+<li>On the CPU: 24 s per step, projected at <strong>~2.5 h</strong>.</li>
+<li>On the GPU after a patch: <strong>11.7 min</strong>, about 13× faster.</li>
+<li>The GFPGAN clean-up then took <strong>39 min on the CPU</strong>, because GFPGAN has no Apple GPU path.</li>
+</ul>
+<p><strong>GPU:</strong> partly.
+<strong>Verdict:</strong> a nice guide or presenter; it can&#39;t carry the story.</p>
+<h2>Results</h2>
+<p><img src="https://kartikjindal.github.io/local-character-video-5-methods-benchmark/blog/img/results-table.png" alt="Scorecard: five methods scored 1–5 on seven criteria, plus time and device">
+<em>Scorecard (1–5). Stock: 2.9 · AI images: 3.7 · AI video: 3.0 · Blender: 3.7 · Narrator: 3.2.</em></p>
+<p>Blender ties SDXL on the average only because consistency and licence clarity weigh as much as realism. <strong>If &quot;real-looking people&quot; is the goal, SDXL wins clearly.</strong></p>
+<h2>Where the time actually goes on a Mac</h2>
+<p><img src="https://kartikjindal.github.io/local-character-video-5-methods-benchmark/blog/img/time-table.png" alt="Measured time per step and the device it ran on">
+<em>Measured time per step on the M1 Max, and where it ran.</em></p>
+<p>The biggest surprise: <strong>the AI video model isn&#39;t slow at generating.</strong> 95% of each clip&#39;s time went to decoding the frames while macOS swapped <strong>up to 32 GB</strong> to disk. The T5 encoder alone is 19 GB in fp32, and my IDE and VM were open. Unloading T5 after encoding cut the swap to 17.5 GB. <strong>Closing other apps is the single biggest speed-up.</strong></p>
+<h2>Pitfalls and fixes</h2>
+<ul>
+<li><strong><code>Input type (float) and bias type (c10::BFloat16) should be the same</code></strong>. Cause: M1 has no native bf16. Fix: Load LTX-Video in <strong>fp32</strong>; it costs ~2× the memory.</li>
+<li><strong><code>Expected a &#39;mps&#39; device type for generator but found &#39;cpu&#39;</code></strong>. Cause: A CPU random generator fed to an MPS pipeline. Fix: <code>torch.Generator(&quot;mps&quot;)</code>.</li>
+<li><strong>SadTalker: <code>Conv3D is not supported on MPS</code></strong>. Cause: Its pinned PyTorch 2.1. Fix: Upgrade to <strong>PyTorch 2.5.1</strong> and apply <a href="https://github.com/kartikjindal/local-character-video-5-methods-benchmark/blob/main/patches/sadtalker-apple-gpu.patch">this 3-file patch</a>.</li>
+<li><strong>SadTalker: <code>invalid type: &#39;torch.mps.FloatTensor&#39;</code></strong>. Cause: CUDA-style <code>.type()</code> calls. Fix: Covered by the same patch.</li>
+<li><strong><code>No module named &#39;pkg_resources&#39;</code></strong>. Cause: New setuptools. Fix: <code>uv pip install &quot;setuptools&lt;70&quot;</code>.</li>
+<li><strong><code>basicsr</code> import error on <code>functional_tensor</code></strong>. Cause: New torchvision. Fix: Change the import to <code>torchvision.transforms.functional</code>.</li>
+<li><strong>SDXL produces black or NaN images in fp16</strong>. Cause: The stock VAE overflows. Fix: Use <code>madebyollin/sdxl-vae-fp16-fix</code>.</li>
+<li><strong>A 30 GB download takes hours</strong>. Cause: One slow stream. Fix: Download models in parallel with <code>hf download</code>, and use the bf16 T5 copy (9.5 GB, not 19 GB).</li>
+<li><strong><code>brew install --cask blender</code> asks for a password</strong>. Cause: The cask needs sudo. Fix: Copy Blender.app from the official DMG into <code>~/Applications</code>.</li>
+</ul>
+<h2>Which method should you use?</h2>
+<ul>
+<li><strong>You need a recurring, realistic main character →</strong> SDXL stills with a fixed character description and seeds, plus camera motion. Generate 2–3 options per shot.</li>
+<li><strong>One hero moment needs real motion (a smile, a nod, someone talking) →</strong> LTX-Video on that SDXL still. One person, small motion, keep the clean seconds.</li>
+<li><strong>The shot has a crowd or a person walking →</strong> keep it a still. Today&#39;s local video models melt here.</li>
+<li><strong>You need exact staging (someone holds a phone to a scanner at a precise moment) →</strong> Blender, if a game look is acceptable.</li>
+<li><strong>You want a presenter face →</strong> a SadTalker bubble with a voice-matched face.</li>
+<li><strong>You need real people and don&#39;t care who →</strong> stock, ideally Pexels with a free API key.</li>
+</ul>
+<h2>Limitations</h2>
+<ul>
+<li><strong>One machine and one run per clip.</strong> No repeated runs, so no variance numbers. An M3 or M4, or a Mac with less load, will be faster.</li>
+<li><strong>The scores are my judgement</strong>, not a user study. The repo has every output so you can judge for yourself.</li>
+<li><strong>I picked the best of 2 seeds</strong> for the stills and trimmed two AI video clips. That&#39;s realistic practice, but it is curation.</li>
+<li>On an NVIDIA GPU (CUDA, bf16) the AI video steps would be many times faster; this is a Mac-specific result.</li>
+</ul>
+<h2>Reproduce it</h2>
+<pre>git clone https://github.com/kartikjindal/local-character-video-5-methods-benchmark &amp;&amp; cd local-character-video-5-methods-benchmark<br>uv venv .venv-ai --python 3.11 &amp;&amp; uv pip install --python .venv-ai/bin/python -r requirements-ai.txt<br>./download-models.sh                                     # ~23 GB, in parallel<br>.venv-ai/bin/python gen_stills.py --seeds 2              # method 2<br>.venv-ai/bin/python gen_video.py --frames 121 --steps 30 # method 3<br>python3 -m http.server 8777                              # dashboard: compare all five</pre>
+<p>The SadTalker and Blender steps are in the <a href="https://github.com/kartikjindal/local-character-video-5-methods-benchmark#reproduce">README</a>.</p>
+<h2>Conclusion</h2>
+<p>Free and local gets you surprisingly far. <strong>SDXL stills give realistic, consistent characters for ~2 minutes of GPU time per shot</strong>, and that should be the backbone. Local AI video is real but narrow: magic for one person making small movements, unusable for crowds, and slow on a Mac mainly because of memory, not compute. Everything here cost $0 and about 28 GB of disk.</p>
+<p><strong>What would you try next?</strong> I&#39;m curious whether a newer local video model, or a Mac with more memory headroom, changes the AI video verdict. If you&#39;ve run LTX-Video, Wan or HunyuanVideo on Apple Silicon, share your timings in the comments.</p>
+<hr>
+<h2>Resources</h2>
+<ul>
+<li>▶ <a href="https://kartikjindal.github.io/local-character-video-5-methods-benchmark/">Live side-by-side dashboard</a> (all five videos in sync)</li>
+<li>📦 <a href="https://github.com/kartikjindal/local-character-video-5-methods-benchmark">Repo: inputs, outputs, scripts, logs</a></li>
+<li>📄 <a href="https://github.com/kartikjindal/local-character-video-5-methods-benchmark/blob/main/REPORT.md">Full report with every measured number</a></li>
+<li>Tools: <a href="https://huggingface.co/SG161222/RealVisXL_V4.0">RealVisXL V4</a> · <a href="https://github.com/Lightricks/LTX-Video">LTX-Video</a> · <a href="https://github.com/OpenTalker/SadTalker">SadTalker</a> · <a href="https://github.com/TencentARC/GFPGAN">GFPGAN</a> · <a href="https://www.blender.org">Blender</a> · <a href="https://quaternius.com">Quaternius</a> · <a href="https://huggingface.co/hexgrad/Kokoro-82M">Kokoro TTS</a> · <a href="https://www.npmjs.com/package/hyperframes">HyperFrames</a> · <a href="https://ffmpeg.org">ffmpeg</a></li>
+</ul>
+<p><em>All AI faces in this post are fictional.</em></p>
+
+</article></body></html>
