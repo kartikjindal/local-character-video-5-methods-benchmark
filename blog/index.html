@@ -18,7 +18,7 @@
   body { margin: 0; background: var(--bg); color: var(--ink); font: 19px/1.7 "Source Serif 4", Georgia, serif; }
   main { max-width: 760px; margin: 0 auto; padding: 56px 20px 96px; }
   .wide { max-width: 1100px; margin-left: 50%; transform: translateX(-50%); width: calc(100vw - 40px); }
-  h1, h2, h3, .meta, table, .tag, figcaption, .btn { font-family: Inter, system-ui, sans-serif; }
+  h1, h2, h3, .meta, table, .tag, figcaption, .btn, blockquote { font-family: Inter, system-ui, sans-serif; }
   h1 { font-size: clamp(32px, 5vw, 46px); line-height: 1.12; letter-spacing: -0.02em; margin: 0 0 18px; }
   h2 { font-size: 26px; letter-spacing: -0.01em; margin: 56px 0 12px; }
   h3 { font-size: 20px; margin: 32px 0 8px; }
@@ -44,32 +44,20 @@
   .btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
   ul, ol { padding-left: 22px; }
   li { margin: 6px 0; }
+  blockquote { margin: 0 0 28px; padding: 16px 22px; background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; font-size: 16px; }
+  blockquote ul { margin: 6px 0 0; }
+  pre { background: var(--code); padding: 14px 16px; border-radius: 10px; overflow-x: auto; font-size: 14px; }
+  pre code { background: none; padding: 0; }
+  #post img + em, #post p > em:only-child { display:block; color: var(--mute); font: 14px Inter, sans-serif; text-align:center; }
   hr { border: 0; border-top: 1px solid var(--line); margin: 56px 0; }
 </style>
 </head>
 <body>
 <main>
-  <div class="meta">October 2026 · 10 min read · Kartik Jindal</div>
+  <div class="meta">October 2026 · 14 min read · Kartik Jindal</div>
   <h1>Real-looking people in a product video, for $0, on a MacBook: I tested 5 methods</h1>
-  <p class="lede">My explainer videos had great app screens and no humans. So I made the same 30-second story five different ways, entirely on my laptop with free tools, and timed everything.</p>
-
-  <div class="btns">
-    <a class="btn" href="../">▶ Watch all 5 side by side</a>
-    <a class="btn ghost" href="https://github.com/kartikjindal/local-character-video-5-methods-benchmark">GitHub repo</a>
-    <a class="btn ghost" href="https://github.com/kartikjindal/local-character-video-5-methods-benchmark/blob/main/REPORT.md">Full report</a>
-  </div>
-
-  <figure class="wide">
-    <img src="../docs/comparison.jpg" alt="Five rows of five shots: stock, AI images, AI video, Blender, narrator">
-    <figcaption>Same story, five ways. Rows: free stock · AI images · AI video · Blender 3D · talking narrator.</figcaption>
-  </figure>
-
-  <h2>The setup</h2>
-  <p>The story is simple: <b>Aarav</b> gets a QR call letter for a walk-in interview, gets scanned at reception, waits in a lounge until his phone buzzes, does the interview, and his record is handed off to the company's HR system. That's five shots and 30.4 seconds, one narrator voice (Kokoro TTS, local), and the same app overlays in every version.</p>
-  <p>Only one thing changes between the five videos: <b>how the people are made</b>. That keeps the comparison fair.</p>
-  <p>The machine was a <b>MacBook Pro with an M1 Max</b> (10-core CPU, 32-core GPU, 64 GB of unified memory). There's no NVIDIA card, so "GPU" here means Apple's GPU through PyTorch's <code>mps</code> backend and Blender's Metal renderer. Other apps (an IDE and a VM) stayed open, as on a normal workday, and that turned out to matter.</p>
-
-  <h2>The five results</h2>
+  <div id="post">Loading…</div>
+  <template id="videos"><h2>Watch the five results</h2>
   <div class="grid wide">
     <div class="card"><video controls preload="none" poster="../results/thumbs/stock-s4.jpg" src="../results/stock.mp4"></video>
       <h3>1 · Free stock photos</h3><p>Wikimedia Commons + Openverse. Real people, but a different person in every shot.</p></div>
@@ -82,84 +70,15 @@
     <div class="card"><video controls preload="none" poster="../results/thumbs/narrator-s2.jpg" src="../results/narrator.mp4"></video>
       <h3>5 · Talking narrator (SadTalker)</h3><p>An AI presenter face lip-synced to the narration, shown as a corner bubble.</p></div>
   </div>
-
-  <h2>Scorecard</h2>
-  <p>I scored each method 1–5 after looking at every shot.</p>
-  <div class="tablewrap"><table>
-    <tr><th></th><th>Stock</th><th>AI images</th><th>AI video</th><th>Blender</th><th>Narrator</th></tr>
-    <tr><td>Realism</td><td>5</td><td>4</td><td>4</td><td>2</td><td>3</td></tr>
-    <tr><td>Same character throughout</td><td>1</td><td>4</td><td>4</td><td>5</td><td>5</td></tr>
-    <tr><td>People actually move</td><td>1</td><td>1</td><td>4</td><td>3</td><td>2</td></tr>
-    <tr><td>Matches the storyboard</td><td>2</td><td>4</td><td>3</td><td>4</td><td>n/a</td></tr>
-    <tr><td>Speed</td><td>4</td><td>4</td><td>1</td><td>3</td><td>2</td></tr>
-    <tr><td>Reliability</td><td>4</td><td>5</td><td>2</td><td>4</td><td>3</td></tr>
-    <tr><td>Licence clarity</td><td>3</td><td>4</td><td>3</td><td>5</td><td>4</td></tr>
-    <tr><th>Average</th><th>2.9</th><th>3.7</th><th>3.0</th><th>3.7</th><th>3.2</th></tr>
-  </table></div>
-
-  <h2>What each method was really like</h2>
-
-  <h3>1. Free stock: real, but it can't tell <em>your</em> story</h3>
-  <p>I expected stock to win on realism, and in a sense it did: these are real photos. But Wikimedia Commons has almost no usable free <em>video</em> of offices, receptions or interviews; what exists is under 720p or is news footage. So all five shots ended up as photos with a slow camera push. Worse, it's a different person in every shot, and one "office lounge" is a bus terminal. Pexels has better free video, but it needs an API key.</p>
-
-  <h3>2. AI images with SDXL: the sweet spot</h3>
-  <p>I wrote one fixed description of Aarav (age, hair, navy blazer, white shirt), fixed the random seeds, and generated two options per shot with <b>RealVisXL V4</b>. Each 1344×768 image took a steady <b>~2 minutes on the M1 Max GPU</b>. The results look like candid office photos, and Aarav is recognisably the same person in most shots.</p>
-  <figure><img src="../docs/aistill-candidates.jpg" alt="Ten SDXL candidate images, two per shot"><figcaption>All 10 candidates (two per shot). Picking took seconds.</figcaption></figure>
-  <p>The flaw is identity drift in busy scenes: in the interview, Aarav suddenly has glasses and a beard. Prompts are also followed loosely; there is no receptionist actually scanning his phone.</p>
-
-  <h3>3. AI video with LTX-Video: magic, then melting</h3>
-  <p>I fed the SDXL stills to <b>LTX-Video 0.9.5</b> (2B) for image-to-video. When the scene is one person making small movements, it's genuinely impressive: Aarav smiles at his phone, and in the interview he talks and gestures while the panel listens.</p>
-  <figure><img src="../docs/aivideo-s4-good.jpg" alt="Interview clip frames: natural talking and gesturing"><figcaption>Start, middle and end of the interview clip: natural talking and gesturing.</figcaption></figure>
-  <p>Crowds and big motion break it. The busy reception melts into a blur of bodies after about three seconds, and walking out of the building warps his body.</p>
-  <figure><img src="../docs/aivideo-s2-melt.jpg" alt="Reception clip frames: the crowd melts by the end"><figcaption>Reception: fine at 0s, morphing at 2.5s, melted at 5s.</figcaption></figure>
-  <p>I rescued those two clips by keeping only the clean first ~3 seconds and playing them forward then backward. The raw clips are in the repo, so you can judge for yourself.</p>
-
-  <h3>4. Blender 3D: total control, zero realism</h3>
-  <p>Using free CC0 rigged characters (Quaternius) on sets built from primitives, every shot does exactly what the storyboard asks: he holds the phone to the scanner, the phone buzzes, he walks out. It's consistent and animated, but it looks like a video game. The free, no-login ways to get realistic 3D humans are effectively gone: Mixamo needs an Adobe login, and MetaHuman and Character Creator aren't free.</p>
-
-  <h3>5. SadTalker narrator: a good guide, not a lead</h3>
-  <p>I generated a fictional presenter face with SDXL and lip-synced it to the full narration with <b>SadTalker</b>. The sync is frame-accurate over all 30 seconds, but only the head moves, and at 512×512 it only works as a small bubble. One lesson: my first presenter was a woman, which looked wrong against the male voice, so match the face to the voice.</p>
-
-  <h2>Where the time actually went</h2>
-  <div class="tablewrap"><table>
-    <tr><th>Step</th><th>Runs on</th><th>Time</th></tr>
-    <tr><td>SDXL image, 1344×768, 30 steps</td><td>GPU</td><td>~2 min each</td></tr>
-    <tr><td>LTX-Video, generating a 5s clip</td><td>GPU</td><td><b>~30 s</b></td></tr>
-    <tr><td>LTX-Video, decoding that clip + memory swap</td><td>GPU + swap</td><td><b>11–26 min</b></td></tr>
-    <tr><td>Blender, 878 frames at 1080p</td><td>GPU (Metal)</td><td>14 min</td></tr>
-    <tr><td>SadTalker lip-sync</td><td>CPU → GPU after a patch</td><td>~2.5 h projected → <b>12 min</b></td></tr>
-    <tr><td>GFPGAN face clean-up, 760 frames</td><td>CPU (no Apple GPU support)</td><td>39 min</td></tr>
-    <tr><td>Assembling each 30s video (HyperFrames)</td><td>CPU</td><td>~1 min</td></tr>
-  </table></div>
-
-  <div class="callout"><b>The surprise:</b> the AI video model isn't slow at <em>generating</em>; it denoises a 5-second clip in about 30 seconds. The other 95% of the time went to decoding the frames while macOS swapped up to <b>32 GB</b> to disk, because the T5 text encoder alone needs 19 GB at full precision and my IDE and VM were open. Unloading the text encoder after encoding the prompts helped; closing other apps would help more.</div>
-
-  <h2>Things that broke (so they don't break for you)</h2>
-  <ol>
-    <li><b>No bf16 on an M1.</b> LTX-Video's documented bf16 path crashed with a dtype mismatch. Run it in fp32 instead, which costs about twice the memory.</li>
-    <li><b>CPU random generator on an MPS pipeline</b> crashed the decode step. Use <code>torch.Generator('mps')</code>.</li>
-    <li><b>SadTalker on the Apple GPU.</b> Its pinned PyTorch 2.1 has no Conv3D on MPS. Upgrading to 2.5.1 and patching three files made it <b>13× faster</b>; the patch is in the repo.</li>
-    <li><b>Downloads.</b> The models total about 28 GB. At 1 MB/s that's an afternoon, so download them in parallel. A bf16 copy of T5 (9.5 GB) halves the biggest file.</li>
-    <li><b>Homebrew's Blender cask wanted sudo.</b> The DMG from blender.org copied into <code>~/Applications</code> works without it.</li>
-  </ol>
-
-  <h2>What I'd actually use</h2>
-  <ol>
-    <li><b>AI images (SDXL) for most character shots</b>: realistic, consistent, and about 2 minutes per shot.</li>
-    <li><b>AI video for 2–3 hero moments only</b>, with one person and small motion. Generate a few seeds and keep the clean seconds.</li>
-    <li><b>Keep the product UI as designed screens.</b> The people provide context; the product is the star.</li>
-    <li>A <b>narrator bubble</b> for the intro or outro, if you want a face.</li>
-  </ol>
-  <p>Total cost: <b>$0</b>. Every model and tool here is free and ran on one laptop. The trade-off is time and about 28 GB of disk.</p>
-
-  <hr>
-  <p>Everything is open: inputs, outputs, scripts, raw logs, every measured number, and a live side-by-side dashboard.</p>
-  <div class="btns">
-    <a class="btn" href="../">▶ Side-by-side dashboard</a>
-    <a class="btn ghost" href="https://github.com/kartikjindal/local-character-video-5-methods-benchmark">GitHub repo</a>
-    <a class="btn ghost" href="https://github.com/kartikjindal/local-character-video-5-methods-benchmark/blob/main/REPORT.md">Full report</a>
-  </div>
-  <p class="meta">Tools: RealVisXL V4 (SDXL) · LTX-Video 0.9.5 · SadTalker + GFPGAN · Blender 4.5 + Quaternius CC0 characters · Kokoro TTS · HyperFrames · ffmpeg. All AI faces are fictional.</p>
+  </template>
 </main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script>
+fetch("post.md").then(r => r.text()).then(md => {
+  const html = marked.parse(md).replace("<!-- VIDEOS -->", document.getElementById("videos").innerHTML);
+  document.getElementById("post").innerHTML = html;
+  document.querySelectorAll("#post table").forEach(t => { const w = document.createElement("div"); w.className = "tablewrap"; t.replaceWith(w); w.appendChild(t); });
+});
+</script>
 </body>
 </html>
