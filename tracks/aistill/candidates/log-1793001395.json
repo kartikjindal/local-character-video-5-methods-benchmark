@@ -1,0 +1,17 @@
+{
+ "total_min": 4.1,
+ "images": [
+  {
+   "shot": "presenter",
+   "seed": 1005,
+   "secs": 116.4,
+   "file": "./tracks/aistill/candidates/presenter-seed1005.png"
+  },
+  {
+   "shot": "presenter",
+   "seed": 1012,
+   "secs": 121.1,
+   "file": "./tracks/aistill/candidates/presenter-seed1012.png"
+  }
+ ]
+}

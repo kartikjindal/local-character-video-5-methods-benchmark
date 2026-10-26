@@ -1,0 +1,6 @@
+gen-video.log:{'shot': 's1', 'secs': 811.6, 'frames': 121, 'steps': 30, 'file': 's1.mp4'}
+gen-video.log:{'shot': 's2', 'secs': 681.2, 'frames': 121, 'steps': 30, 'file': 's2.mp4'}
+gen-video.log:{'shot': 's3', 'secs': 1567.6, 'frames': 121, 'steps': 30, 'file': 's3.mp4'}
+gen-video2.log:{'shot': 's4', 'secs': 1380.5, 'frames': 121, 'steps': 30, 'file': 's4.mp4'}
+gen-video2.log:{'shot': 's5', 'secs': 804.1, 'frames': 121, 'steps': 30, 'file': 's5.mp4'}
+gen-video2.log:exit=0

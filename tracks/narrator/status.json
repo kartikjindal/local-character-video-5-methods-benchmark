@@ -1,0 +1,38 @@
+{
+ "track": "narrator",
+ "state": "done",
+ "label": "Narrator \u00b7 SadTalker (local)",
+ "narrator": "narrator.mp4",
+ "tools": "SadTalker (lip-sync) + GFPGAN (face clean-up), presenter face from SDXL, backgrounds from track 2",
+ "licence": "SadTalker Apache-2.0; GFPGAN Apache-2.0; SDXL face OpenRAIL++",
+ "minutes": 52,
+ "shots": {
+  "s1": {
+   "file": "s1.png",
+   "kind": "photo"
+  },
+  "s2": {
+   "file": "s2.png",
+   "kind": "photo"
+  },
+  "s3": {
+   "file": "s3.png",
+   "kind": "photo"
+  },
+  "s4": {
+   "file": "s4.png",
+   "kind": "photo"
+  },
+  "s5": {
+   "file": "s5.png",
+   "kind": "photo"
+  }
+ },
+ "weaknesses": [
+  "Only the head moves: lips, blinks and slight nods; no hands or body",
+  "~52 min for 30 s on this Mac (12 min lip-sync on the GPU after patching SadTalker for Apple GPUs, 40 min face clean-up)",
+  "512x512 face, so it only works small (a corner bubble), not full-screen",
+  "A fictional AI face, which some viewers find uncanny; works best as a guide, not the star"
+ ],
+ "version": 1793012146
+}

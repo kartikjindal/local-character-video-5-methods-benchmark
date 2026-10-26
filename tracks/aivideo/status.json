@@ -1,0 +1,39 @@
+{
+ "track": "aivideo",
+ "state": "done",
+ "label": "AI video \u00b7 LTX-Video (local)",
+ "tools": "LTX-Video 0.9.5 (2B) image-to-video via diffusers on Apple GPU, from the track-2 stills; T5-XXL text encoder (bf16 copy)",
+ "licence": "LTX-Video 2B 0.9.5: Open RAIL-M (commercial use allowed, with use restrictions); outputs free to use",
+ "minutes": 95,
+ "shots": {
+  "s1": {
+   "file": "s1.mp4",
+   "kind": "video"
+  },
+  "s2": {
+   "file": "s2-clean.mp4",
+   "kind": "video"
+  },
+  "s3": {
+   "file": "s3.mp4",
+   "kind": "video"
+  },
+  "s4": {
+   "file": "s4.mp4",
+   "kind": "video"
+  },
+  "s5": {
+   "file": "s5-clean.mp4",
+   "kind": "video"
+  }
+ },
+ "weaknesses": [
+  "Slow on this Mac: 11-26 min per 5-second clip (decoding dominates; memory swapping with other apps open)",
+  "Crowds melt: s2's background people morphed after ~3 s, so only the clean first 2.6 s is used, played forward then back",
+  "s5 warps at the end (body smears), so its first 3.1 s is played forward then back",
+  "Generated at 768x448 and upscaled to 1080p, so it's softer than the stills",
+  "s3 camera drift slides Aarav toward the centre; small ghost figure late in s3; tie colour drifts in s4",
+  "Best at one person doing small movements (s1, s4)"
+ ],
+ "version": 1793008929
+}

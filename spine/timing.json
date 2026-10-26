@@ -1,0 +1,40 @@
+{
+ "total": 30.4,
+ "shots": [
+  {
+   "id": "s1",
+   "start": 0,
+   "dur": 6.5,
+   "vo_start": 0.3,
+   "vo_dur": 6.04
+  },
+  {
+   "id": "s2",
+   "start": 6.5,
+   "dur": 5.3,
+   "vo_start": 6.8,
+   "vo_dur": 4.69
+  },
+  {
+   "id": "s3",
+   "start": 11.8,
+   "dur": 6.5,
+   "vo_start": 12.1,
+   "vo_dur": 6.02
+  },
+  {
+   "id": "s4",
+   "start": 18.3,
+   "dur": 5.7,
+   "vo_start": 18.6,
+   "vo_dur": 5.16
+  },
+  {
+   "id": "s5",
+   "start": 24.0,
+   "dur": 6.4,
+   "vo_start": 24.3,
+   "vo_dur": 5.8
+  }
+ ]
+}

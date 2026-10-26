@@ -1,0 +1,68 @@
+diff --git a/inference.py b/inference.py
+index a0b0079..fa5db13 100644
+--- a/inference.py
++++ b/inference.py
+@@ -138,6 +138,8 @@ if __name__ == '__main__':
+ 
+     if torch.cuda.is_available() and not args.cpu:
+         args.device = "cuda"
++    elif torch.backends.mps.is_available() and not args.cpu:
++        args.device = "mps"
+     else:
+         args.device = "cpu"
+ 
+diff --git a/src/facerender/modules/dense_motion.py b/src/facerender/modules/dense_motion.py
+index a286ead..e1129b5 100644
+--- a/src/facerender/modules/dense_motion.py
++++ b/src/facerender/modules/dense_motion.py
+@@ -72,7 +72,7 @@ class DenseMotionNetwork(nn.Module):
+         heatmap = gaussian_driving - gaussian_source
+ 
+         # adding background feature
+-        zeros = torch.zeros(heatmap.shape[0], 1, spatial_size[0], spatial_size[1], spatial_size[2]).type(heatmap.type())
++        zeros = torch.zeros(heatmap.shape[0], 1, spatial_size[0], spatial_size[1], spatial_size[2]).to(heatmap.device, heatmap.dtype)
+         heatmap = torch.cat([zeros, heatmap], dim=1)
+         heatmap = heatmap.unsqueeze(2)         # (bs, num_kp+1, 1, d, h, w)
+         return heatmap
+diff --git a/src/facerender/modules/util.py b/src/facerender/modules/util.py
+index b916dee..c46e709 100644
+--- a/src/facerender/modules/util.py
++++ b/src/facerender/modules/util.py
+@@ -9,6 +9,13 @@ from src.facerender.sync_batchnorm import SynchronizedBatchNorm3d as BatchNorm3d
+ import torch.nn.utils.spectral_norm as spectral_norm
+ 
+ 
++
++def _as_type(t, type):
++    # tensor.type('torch.mps.FloatTensor') is unsupported; move to MPS explicitly
++    if isinstance(type, str) and type.startswith('torch.mps.'):
++        return t.float().to('mps')
++    return t.type(type)
++
+ def kp2gaussian(kp, spatial_size, kp_variance):
+     """
+     Transform a keypoint into gaussian like representation
+@@ -37,8 +44,8 @@ def make_coordinate_grid_2d(spatial_size, type):
+     Create a meshgrid [-1,1] x [-1,1] of given spatial_size.
+     """
+     h, w = spatial_size
+-    x = torch.arange(w).type(type)
+-    y = torch.arange(h).type(type)
++    x = _as_type(torch.arange(w), type)
++    y = _as_type(torch.arange(h), type)
+ 
+     x = (2 * (x / (w - 1)) - 1)
+     y = (2 * (y / (h - 1)) - 1)
+@@ -53,9 +60,9 @@ def make_coordinate_grid_2d(spatial_size, type):
+ 
+ def make_coordinate_grid(spatial_size, type):
+     d, h, w = spatial_size
+-    x = torch.arange(w).type(type)
+-    y = torch.arange(h).type(type)
+-    z = torch.arange(d).type(type)
++    x = _as_type(torch.arange(w), type)
++    y = _as_type(torch.arange(h), type)
++    z = _as_type(torch.arange(d), type)
+ 
+     x = (2 * (x / (w - 1)) - 1)
+     y = (2 * (y / (h - 1)) - 1)

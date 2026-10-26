@@ -1,0 +1,47 @@
+W1026 13:02:24.941000 52469 .venv-ai/lib/python3.11/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:35] NOTE: Redirects are currently not supported in MacOs.
+./.venv-ai/lib/python3.11/site-packages/huggingface_hub/utils/_validators.py:205: UserWarning: The `local_dir_use_symlinks` argument is deprecated and ignored in `hf_hub_download`. Downloading to a local directory does not use symlinks anymore.
+  warnings.warn(
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+./.venv-ai/lib/python3.11/site-packages/diffusers/utils/deprecation_utils.py:23: FutureWarning: `torch_dtype` is deprecated and will be removed in version 1.0.0. Please use `dtype` instead.
+  deprecate("torch_dtype", "1.0.0", _TORCH_DTYPE_DEPRECATION_MESSAGE)
+Loading pipeline components...:   0%|          | 0/7 [00:00<?, ?it/s]
+Loading weights:   0%|          | 0/517 [00:00<?, ?it/s][ALoading weights: 100%|██████████| 517/517 [00:00<00:00, 6321.44it/s]
+Loading pipeline components...:  14%|█▍        | 1/7 [00:00<00:01,  4.65it/s]Loading pipeline components...:  29%|██▊       | 2/7 [00:00<00:01,  3.03it/s]Loading pipeline components...:  86%|████████▌ | 6/7 [00:00<00:00,  9.93it/s]
+Loading weights:   0%|          | 0/196 [00:00<?, ?it/s][ALoading weights: 100%|██████████| 196/196 [00:00<00:00, 7048.59it/s]
+Loading pipeline components...: 100%|██████████| 7/7 [00:00<00:00,  8.58it/s]
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (89 > 77). Running this sequence through the model will result in indexing errors
+[transformers] Ignoring clean_up_tokenization_spaces=True for BPE tokenizer CLIPTokenizer. The clean_up_tokenization post-processing step is designed for WordPiece tokenizers and is destructive for BPE (it strips spaces before punctuation). Set clean_up_tokenization_spaces=False to suppress this warning, or set clean_up_tokenization_spaces_for_bpe_even_though_it_will_corrupt_output=True to force cleanup anyway.
+The following part of your input was truncated because CLIP can only handle sequences up to 77 tokens: ['of field , sharp focus , realistic skin texture , modern bangalore tech office']
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (89 > 77). Running this sequence through the model will result in indexing errors
+The following part of your input was truncated because CLIP can only handle sequences up to 77 tokens: ['of field , sharp focus , realistic skin texture , modern bangalore tech office']
+{'shot': 's1', 'seed': 1000, 'secs': 118.8, 'file': './tracks/aistill/candidates/s1-seed1000.png'}
+The following part of your input was truncated because CLIP can only handle sequences up to 77 tokens: ['of field , sharp focus , realistic skin texture , modern bangalore tech office']
+The following part of your input was truncated because CLIP can only handle sequences up to 77 tokens: ['of field , sharp focus , realistic skin texture , modern bangalore tech office']
+{'shot': 's1', 'seed': 1007, 'secs': 119.8, 'file': './tracks/aistill/candidates/s1-seed1007.png'}
+The following part of your input was truncated because CLIP can only handle sequences up to 77 tokens: [', 3 5 mm lens , natural light , shallow depth of field , sharp focus , realistic skin texture , modern bangalore tech office']
+The following part of your input was truncated because CLIP can only handle sequences up to 77 tokens: [', 3 5 mm lens , natural light , shallow depth of field , sharp focus , realistic skin texture , modern bangalore tech office']
+{'shot': 's2', 'seed': 1001, 'secs': 123.2, 'file': './tracks/aistill/candidates/s2-seed1001.png'}
+The following part of your input was truncated because CLIP can only handle sequences up to 77 tokens: [', 3 5 mm lens , natural light , shallow depth of field , sharp focus , realistic skin texture , modern bangalore tech office']
+The following part of your input was truncated because CLIP can only handle sequences up to 77 tokens: [', 3 5 mm lens , natural light , shallow depth of field , sharp focus , realistic skin texture , modern bangalore tech office']
+{'shot': 's2', 'seed': 1008, 'secs': 131.2, 'file': './tracks/aistill/candidates/s2-seed1008.png'}
+The following part of your input was truncated because CLIP can only handle sequences up to 77 tokens: [', modern bangalore tech office']
+The following part of your input was truncated because CLIP can only handle sequences up to 77 tokens: [', modern bangalore tech office']
+{'shot': 's3', 'seed': 1002, 'secs': 117.1, 'file': './tracks/aistill/candidates/s3-seed1002.png'}
+The following part of your input was truncated because CLIP can only handle sequences up to 77 tokens: [', modern bangalore tech office']
+The following part of your input was truncated because CLIP can only handle sequences up to 77 tokens: [', modern bangalore tech office']
+{'shot': 's3', 'seed': 1009, 'secs': 115.4, 'file': './tracks/aistill/candidates/s3-seed1009.png'}
+The following part of your input was truncated because CLIP can only handle sequences up to 77 tokens: ['candid documentary photo , 3 5 mm lens , natural light , shallow depth of field , sharp focus , realistic skin texture , modern bangalore tech office']
+The following part of your input was truncated because CLIP can only handle sequences up to 77 tokens: ['candid documentary photo , 3 5 mm lens , natural light , shallow depth of field , sharp focus , realistic skin texture , modern bangalore tech office']
+{'shot': 's4', 'seed': 1003, 'secs': 108.8, 'file': './tracks/aistill/candidates/s4-seed1003.png'}
+The following part of your input was truncated because CLIP can only handle sequences up to 77 tokens: ['candid documentary photo , 3 5 mm lens , natural light , shallow depth of field , sharp focus , realistic skin texture , modern bangalore tech office']
+The following part of your input was truncated because CLIP can only handle sequences up to 77 tokens: ['candid documentary photo , 3 5 mm lens , natural light , shallow depth of field , sharp focus , realistic skin texture , modern bangalore tech office']
+{'shot': 's4', 'seed': 1010, 'secs': 114.5, 'file': './tracks/aistill/candidates/s4-seed1010.png'}
+The following part of your input was truncated because CLIP can only handle sequences up to 77 tokens: ['texture , modern bangalore tech office']
+The following part of your input was truncated because CLIP can only handle sequences up to 77 tokens: ['texture , modern bangalore tech office']
+{'shot': 's5', 'seed': 1004, 'secs': 118.8, 'file': './tracks/aistill/candidates/s5-seed1004.png'}
+The following part of your input was truncated because CLIP can only handle sequences up to 77 tokens: ['texture , modern bangalore tech office']
+The following part of your input was truncated because CLIP can only handle sequences up to 77 tokens: ['texture , modern bangalore tech office']
+{'shot': 's5', 'seed': 1011, 'secs': 110.7, 'file': './tracks/aistill/candidates/s5-seed1011.png'}
+{'shot': 'presenter', 'seed': 1005, 'secs': 119.0, 'file': './tracks/aistill/candidates/presenter-seed1005.png'}
+{'shot': 'presenter', 'seed': 1012, 'secs': 127.6, 'file': './tracks/aistill/candidates/presenter-seed1012.png'}
+exit=0

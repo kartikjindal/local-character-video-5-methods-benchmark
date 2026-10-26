@@ -1,0 +1,6 @@
+.venv*/
+render/
+SadTalker/
+__pycache__/
+.DS_Store
+*.incomplete

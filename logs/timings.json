@@ -1,0 +1,102 @@
+{
+ "machine": {
+  "model": "Apple MacBook Pro, M1 Max",
+  "cpu": "10 cores (8 performance + 2 efficiency)",
+  "gpu": "32-core Apple GPU, Metal 4 (PyTorch 'mps' backend)",
+  "memory_gb": 64,
+  "os": "macOS 26.5.1",
+  "disk_free_gb_at_start": 199,
+  "note": "IntelliJ, a Linux VM and Cursor were open the whole time; that is why memory ran out during AI video."
+ },
+ "network": {
+  "huggingface_MBps_before": "0.5-1.5",
+  "huggingface_MBps_after_switch": 4.6,
+  "github_blender_MBps_after_switch": 6.7
+ },
+ "downloads_gb": {
+  "sdxl_realvisxl_v4_fp16": 7.0,
+  "sdxl_vae_fp16_fix": 0.3,
+  "ltx_video_0_9_5_transformer": 3.85,
+  "ltx_video_vae": 2.49,
+  "t5_xxl_encoder_bf16": 9.52,
+  "sadtalker_checkpoints": 1.0,
+  "gfpgan_facexlib_weights": 0.74,
+  "blender_4_5_dmg": 0.4,
+  "pytorch_and_python_libs": 3.0
+ },
+ "tracks": {
+  "stock": {
+   "sourcing_min": 22,
+   "hyperframes_render_s": 76,
+   "gpu": "no"
+  },
+  "aistill": {
+   "per_image_s": {
+    "min": 108.8,
+    "max": 131.2,
+    "avg": 118.7
+   },
+   "images": 16,
+   "resolution": "1344x768 (presenter 1024x1024)",
+   "steps": 30,
+   "generation_min": 28.0,
+   "hyperframes_render_s": 93,
+   "gpu": "yes (MPS, fp16)"
+  },
+  "aivideo": {
+   "smoke_test": {
+    "frames": 49,
+    "steps": 20,
+    "denoise_s": 33,
+    "total_s": 278.1
+   },
+   "clips_s": {
+    "s1": 811.6,
+    "s2": 681.2,
+    "s3": 1567.6,
+    "s4": 1380.5,
+    "s5": 804.1
+   },
+   "clip_frames": 121,
+   "clip_seconds": 5.04,
+   "resolution": "768x448",
+   "steps": 30,
+   "denoise_s_per_clip": "27-29 (about 1 step per second)",
+   "decode_and_swap_s_per_clip": "650-1540",
+   "total_generation_min": 87.4,
+   "hyperframes_render_s": 63,
+   "gpu": "yes (MPS, fp32; bf16 failed on M1)",
+   "swap_gb_peak": 32,
+   "swap_gb_after_unloading_t5": 17.5
+  },
+  "blender": {
+   "total_min": 35,
+   "final_render_min": 14,
+   "render_settings": "EEVEE, 1920x1080, 24 samples, 30 fps, 878 frames",
+   "hyperframes_render_s": 67,
+   "gpu": "yes (Metal, EEVEE)"
+  },
+  "narrator": {
+   "cpu_attempt": {
+    "face_renderer_s_per_step": 24.1,
+    "projected_min": 150,
+    "aborted_after_min": 30
+   },
+   "gpu_torch_2_1": "failed: Conv3D is not supported on MPS",
+   "gpu_torch_2_5_patched": {
+    "face_renderer_min": 11.7,
+    "face_renderer_s_per_step": 1.85,
+    "steps": 380
+   },
+   "gfpgan_face_cleanup": {
+    "min": 39.4,
+    "s_per_frame": 3.1,
+    "frames": 760,
+    "device": "CPU (GFPGAN only uses CUDA or CPU)"
+   },
+   "total_min": 51.7,
+   "hyperframes_render_s": 63,
+   "gpu": "partly (lip-sync on GPU, face clean-up on CPU)"
+  }
+ }
+}

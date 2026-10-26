@@ -1,0 +1,12 @@
+{
+ "total_min": 7.2,
+ "clips": [
+  {
+   "shot": "s1",
+   "secs": 278.1,
+   "frames": 49,
+   "steps": 20,
+   "file": "s1-smoke.mp4"
+  }
+ ]
+}

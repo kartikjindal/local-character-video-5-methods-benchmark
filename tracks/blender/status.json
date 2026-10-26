@@ -1,0 +1,49 @@
+{
+ "track": "blender",
+ "state": "done",
+ "label": "3D \u00b7 Blender",
+ "tools": "Blender 4.5 EEVEE + Quaternius animated characters (Poly Pizza glTF), primitive-built sets",
+ "licence": "CC0 1.0 (characters); sets and props built in Blender",
+ "credits": "CREDITS.md",
+ "minutes": 35,
+ "shots": {
+  "s1": {
+   "file": "s1.mp4",
+   "kind": "video",
+   "fit": "ok",
+   "note": "Apartment, warm morning window light. Aarav sits on the sofa edge looking down at a phone in his hand, with a slow push-in. The phone is small and partly hidden by his hand."
+  },
+  "s2": {
+   "file": "s2.mp4",
+   "kind": "video",
+   "fit": "good",
+   "note": "White reception desk with a scanner stand. Aarav holds his phone out to the scanner, Sunita (maroon cardigan) looks on from behind the desk, and two background people walk past. Slow dolly."
+  },
+  "s3": {
+   "file": "s3.mp4",
+   "kind": "video",
+   "fit": "good",
+   "note": "Lounge with teal chairs and a window wall. Aarav sits between two other candidates looking at his phone. The phone screen flares and shakes at about 1.6s for the buzz."
+  },
+  "s4": {
+   "file": "s4.mp4",
+   "kind": "video",
+   "fit": "ok",
+   "note": "Glass meeting room. Over-the-shoulder view of Aarav facing Neha (grey) and Vikram (light blue) across a table with a laptop. Talking is shown only by head nods. There is no lip or hand motion."
+  },
+  "s5": {
+   "file": "s5.mp4",
+   "kind": "video",
+   "fit": "ok",
+   "note": "Glass office entrance in daylight. Aarav walks out of the doors toward the camera with his phone in hand while the camera tracks back. Walk speed matches the stride, so the feet do not slide."
+  }
+ },
+ "weaknesses": [
+  "Stylised low-poly CC0 characters (Quaternius), not realistic humans; faces have no expressions, so Aarav cannot visibly smile in s5",
+  "The same three base models are recoloured for every person; Neha has no glasses and Vikram has no beard; Aarav's model has a full beard rather than light stubble and short hair; the women's hair is a short cropped style",
+  "No talk or lip-sync animation; conversation in s4 is shown with procedural head nods; the phone-holding arms are a scripted pose layered over the idle and sit loops",
+  "Sets are simple primitives with no textures; walls and windows are flat, and the s1 window is a plain bright plane",
+  "Phone in s1 is small and partly hidden by the hand; the background walkers in s2 enter the right third (the UI zone), which is acceptable since the card covers it"
+ ],
+ "version": 1792999946
+}

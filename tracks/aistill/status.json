@@ -1,0 +1,38 @@
+{
+ "track": "aistill",
+ "state": "done",
+ "label": "AI images \u00b7 SDXL (local)",
+ "tools": "RealVisXL V4 (SDXL) via diffusers on Apple GPU (MPS), fixed cast prompt + seeds, HyperFrames camera motion",
+ "licence": "CreativeML Open RAIL++-M (model); generated images free to use",
+ "minutes": 24,
+ "shots": {
+  "s1": {
+   "file": "s1.png",
+   "kind": "photo"
+  },
+  "s2": {
+   "file": "s2.png",
+   "kind": "photo"
+  },
+  "s3": {
+   "file": "s3.png",
+   "kind": "photo"
+  },
+  "s4": {
+   "file": "s4.png",
+   "kind": "photo"
+  },
+  "s5": {
+   "file": "s5.png",
+   "kind": "photo"
+  }
+ },
+ "weaknesses": [
+  "Stills only: motion is camera push-in, people don't move",
+  "~110 s per 1344x768 image on the M1 Max GPU (12 images \u2248 24 min)",
+  "Identity drifts: in s4 Aarav gained glasses and a fuller beard",
+  "No receptionist actually scanning in s2; prompts are followed loosely",
+  "s3 mirrored so the UI card doesn't cover Aarav"
+ ],
+ "version": 1793001292
+}

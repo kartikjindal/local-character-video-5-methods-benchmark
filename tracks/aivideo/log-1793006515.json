@@ -1,0 +1,19 @@
+{
+ "total_min": 38.3,
+ "clips": [
+  {
+   "shot": "s4",
+   "secs": 1380.5,
+   "frames": 121,
+   "steps": 30,
+   "file": "s4.mp4"
+  },
+  {
+   "shot": "s5",
+   "secs": 804.1,
+   "frames": 121,
+   "steps": 30,
+   "file": "s5.mp4"
+  }
+ ]
+}

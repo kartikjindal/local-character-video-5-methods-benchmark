@@ -1,0 +1,48 @@
+{
+ "track": "stock",
+ "state": "done",
+ "shots": {
+  "s1": {
+   "file": "s1.jpg",
+   "kind": "photo",
+   "fit": "weak",
+   "note": "Man on phone at home, but seen from behind with headphones; not Indian, no face, casual."
+  },
+  "s2": {
+   "file": "s2.jpg",
+   "kind": "photo",
+   "fit": "weak",
+   "note": "Two Southeast Asian staff at a hotel/bank-style reception desk; no visitor holding up a phone, no scanner."
+  },
+  "s3": {
+   "file": "s3.jpg",
+   "kind": "photo",
+   "fit": "weak",
+   "note": "Young man seated looking down at phone, but in a bus terminal, alone, not an office lounge."
+  },
+  "s4": {
+   "file": "s4.jpg",
+   "kind": "photo",
+   "fit": "ok",
+   "note": "Corporate interview in a glass-table meeting room; one interviewer, not a two-person panel; candidate not clearly Indian."
+  },
+  "s5": {
+   "file": "s5.jpg",
+   "kind": "photo",
+   "fit": "good",
+   "note": "Businessman walking out of a modern office building in daylight; small in frame, phone not clearly visible; not Indian."
+  }
+ },
+ "weaknesses": [
+  "No usable video found: Commons office/interview videos are thin, sub-720p or news footage.",
+  "Flickr via Openverse tops out at 1024px so only Commons-hosted photos (>=1600px) were used.",
+  "No Indian/South-Asian leads found except loosely in s2.",
+  "s3 is not an office lounge; s1 has no visible face."
+ ],
+ "minutes": 22,
+ "label": "Free stock \u00b7 Wikimedia",
+ "tools": "Wikimedia Commons + Openverse search, ffmpeg, HyperFrames",
+ "licence": "CC0 / CC BY / CC BY-SA (attribution required)",
+ "credits": "CREDITS.md",
+ "version": 1792998741
+}

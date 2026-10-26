@@ -1,0 +1,77 @@
+{
+ "total_min": 23.9,
+ "images": [
+  {
+   "shot": "s1",
+   "seed": 1000,
+   "secs": 118.8,
+   "file": "./tracks/aistill/candidates/s1-seed1000.png"
+  },
+  {
+   "shot": "s1",
+   "seed": 1007,
+   "secs": 119.8,
+   "file": "./tracks/aistill/candidates/s1-seed1007.png"
+  },
+  {
+   "shot": "s2",
+   "seed": 1001,
+   "secs": 123.2,
+   "file": "./tracks/aistill/candidates/s2-seed1001.png"
+  },
+  {
+   "shot": "s2",
+   "seed": 1008,
+   "secs": 131.2,
+   "file": "./tracks/aistill/candidates/s2-seed1008.png"
+  },
+  {
+   "shot": "s3",
+   "seed": 1002,
+   "secs": 117.1,
+   "file": "./tracks/aistill/candidates/s3-seed1002.png"
+  },
+  {
+   "shot": "s3",
+   "seed": 1009,
+   "secs": 115.4,
+   "file": "./tracks/aistill/candidates/s3-seed1009.png"
+  },
+  {
+   "shot": "s4",
+   "seed": 1003,
+   "secs": 108.8,
+   "file": "./tracks/aistill/candidates/s4-seed1003.png"
+  },
+  {
+   "shot": "s4",
+   "seed": 1010,
+   "secs": 114.5,
+   "file": "./tracks/aistill/candidates/s4-seed1010.png"
+  },
+  {
+   "shot": "s5",
+   "seed": 1004,
+   "secs": 118.8,
+   "file": "./tracks/aistill/candidates/s5-seed1004.png"
+  },
+  {
+   "shot": "s5",
+   "seed": 1011,
+   "secs": 110.7,
+   "file": "./tracks/aistill/candidates/s5-seed1011.png"
+  },
+  {
+   "shot": "presenter",
+   "seed": 1005,
+   "secs": 119.0,
+   "file": "./tracks/aistill/candidates/presenter-seed1005.png"
+  },
+  {
+   "shot": "presenter",
+   "seed": 1012,
+   "secs": 127.6,
+   "file": "./tracks/aistill/candidates/presenter-seed1012.png"
+  }
+ ]
+}

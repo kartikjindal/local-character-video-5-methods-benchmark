@@ -1,0 +1,17 @@
+landmark Det:: 100%|██████████| 1/1 [00:00<00:00,  2.29it/s]
+3DMM Extraction In Video:: 100%|██████████| 1/1 [00:00<00:00,  3.82it/s]
+3DMM Extraction In Video:: 100%|██████████| 1/1 [00:00<00:00,  3.81it/s]
+mel:: 100%|██████████| 760/760 [00:00<00:00, 111014.52it/s]
+audio2exp:: 100%|██████████| 76/76 [00:00<00:00, 135.78it/s]
+Face Renderer:: 100%|█████████▉| 379/380 [11:38<00:02,  2.06s/it]
+Face Renderer:: 100%|██████████| 380/380 [11:41<00:00,  2.54s/it]
+Face Renderer:: 100%|██████████| 380/380 [11:41<00:00,  1.85s/it]
+The generated video is named ../tracks/narrator/out/2026_10_26_15.32.48/presenter##narration-full.mp4
+Face Enhancer:: 100%|█████████▉| 757/760 [39:15<00:08,  2.93s/it]
+Face Enhancer:: 100%|█████████▉| 758/760 [39:18<00:05,  2.86s/it]
+Face Enhancer:: 100%|█████████▉| 759/760 [39:21<00:02,  2.80s/it]
+Face Enhancer:: 100%|██████████| 760/760 [39:24<00:00,  2.77s/it]
+Face Enhancer:: 100%|██████████| 760/760 [39:24<00:00,  3.11s/it]
+The generated video is named ../tracks/narrator/out/2026_10_26_15.32.48/presenter##narration-full_enhanced.mp4
+The generated video is named: ../tracks/narrator/out/2026_10_26_15.32.48.mp4
+exit=0

@@ -1,0 +1,35 @@
+{
+  "title": "Aarav's walk-in day (30s character lab)",
+  "logline": "One candidate, one Saturday: call letter, one scan, one buzz, one interview, one handoff to HR.",
+  "voice": "am_michael @ 1.06x (Kokoro, local)",
+  "cast": {
+    "aarav": "Aarav Mehta, 26, Indian man, short black hair, light stubble, navy blazer over white shirt, carries a slim black laptop bag",
+    "receptionist": "Sunita, 40s, Indian woman, maroon cardigan, lanyard, at a white reception desk with a phone-scanner stand",
+    "panel": "Neha (30s, Indian woman, glasses, grey blazer) and Vikram (40s, Indian man, beard, light-blue shirt)",
+    "narrator": "Fictional presenter, 30s, Indian woman, dark hair tied back, teal blazer, neutral studio background"
+  },
+  "shots": [
+    {"id": "s1", "title": "The call letter", "people": "Aarav at home, early morning, looking at his phone, hopeful",
+     "ui": "phone: CALL LETTER · QR · Sat 14 Dec 09:00 · Tower B",
+     "vo": "Saturday morning. Aarav has one thing on his phone: a call letter with his own QR code."},
+    {"id": "s2", "title": "One scan at reception", "people": "Aarav at a busy office reception, holds his phone out; receptionist scans it",
+     "ui": "scanner: ✓ Verified · #101 · checked in 08:52",
+     "vo": "At reception, one scan. No list, no queue. He's checked in, in a second."},
+    {"id": "s3", "title": "The buzz", "people": "Aarav seated in a modern waiting lounge with other candidates; looks down at his phone as it buzzes",
+     "ui": "notification: Please proceed to Room 4 · Neha S., Vikram R.",
+     "vo": "He waits in the lounge. When a panel is free, his phone buzzes: room four, and who he's meeting."},
+    {"id": "s4", "title": "The interview", "people": "Aarav in a glass meeting room facing a two-person panel across a table, mid-conversation",
+     "ui": "laptop: scorecard · 4 / 5 · Select",
+     "vo": "The panel interviews him and scores every skill. One click: select, or reject."},
+    {"id": "s5", "title": "Handoff to HR", "people": "Aarav walking out of the office building into daylight, smiling, phone in hand",
+     "ui": "card: synced to client HR system · webhook ✓",
+     "vo": "Cleared. Trinexa syncs his record to the company's own H R system. Your Saturday, back."}
+  ],
+  "tracks": [
+    {"id": "stock", "name": "1 · Free stock (Wikimedia / Openverse)", "how": "Real CC-licensed footage & photos, Ken Burns motion, UI overlays"},
+    {"id": "aistill", "name": "2 · AI images (SDXL, local)", "how": "RealVisXL on the Mac GPU, fixed-seed consistent cast, camera motion, UI overlays"},
+    {"id": "aivideo", "name": "3 · AI video (LTX-Video, local)", "how": "Track-2 stills animated image-to-video by LTX-Video 0.9.5 2B"},
+    {"id": "blender", "name": "4 · 3D (Blender, local)", "how": "CC0 rigged characters, scripted scenes, Eevee render"},
+    {"id": "narrator", "name": "5 · Talking narrator (SadTalker, local)", "how": "SDXL presenter face lip-synced to the narration, over the track-2 visuals"}
+  ]
+}

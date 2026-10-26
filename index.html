@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Character Lab</title>
+<style>
+  :root { --bg:#0b1020; --panel:#121a2e; --line:#232e4a; --ink:#e8edf7; --mute:#8f9bb6; --teal:#2ee6c5; --amber:#f5b942; --red:#ff6b6b; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Inter", sans-serif; }
+  header { padding: 28px 32px 8px; display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+  h1 { margin: 0; font-size: 26px; letter-spacing: .02em; }
+  h1 b { color: var(--teal); }
+  .sub { color: var(--mute); }
+  main { padding: 8px 32px 48px; }
+  h2 { font-size: 15px; text-transform: uppercase; letter-spacing: .12em; color: var(--mute); margin: 28px 0 12px; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--mute); font-weight: 600; font-size: 13px; }
+  tr:last-child td { border-bottom: 0; }
+  td.t { font-family: ui-monospace, Menlo, monospace; color: var(--teal); white-space: nowrap; }
+  .thumbs { display: grid; grid-template-columns: 170px repeat(5, 1fr); gap: 8px; padding: 12px; align-items: center; }
+  .thumbs .h { color: var(--mute); font-size: 13px; }
+  .thumbs img, .thumbs .ph { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; background: #0e1527; border: 1px solid var(--line); }
+  .thumbs .ph { display: flex; align-items: center; justify-content: center; color: var(--mute); font-size: 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(460px, 1fr)); gap: 18px; }
+  .card { padding: 16px; }
+  .card h3 { margin: 0 0 4px; font-size: 17px; display: flex; justify-content: space-between; gap: 8px; }
+  .how { color: var(--mute); font-size: 13px; margin-bottom: 10px; }
+  video { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 10px; display: block; }
+  .wait { width: 100%; aspect-ratio: 16/9; border-radius: 10px; border: 1px dashed var(--line); display: flex; align-items: center; justify-content: center; color: var(--mute); text-align: center; padding: 20px; }
+  .pill { font-size: 12px; padding: 2px 10px; border-radius: 99px; border: 1px solid currentColor; font-weight: 600; white-space: nowrap; }
+  .s-done { color: var(--teal); } .s-running { color: var(--amber); } .s-queued { color: var(--mute); } .s-failed { color: var(--red); }
+  dl { display: grid; grid-template-columns: 110px 1fr; gap: 4px 10px; margin: 12px 0 0; font-size: 13px; }
+  dt { color: var(--mute); } dd { margin: 0; }
+  ul { margin: 6px 0 0; padding-left: 18px; font-size: 13px; color: #c9d2e6; }
+  .bar { display: flex; gap: 10px; align-items: center; margin: 4px 0 0; flex-wrap: wrap; }
+  button { background: var(--teal); color: #062a24; border: 0; border-radius: 10px; padding: 9px 16px; font-weight: 700; cursor: pointer; }
+  button.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  a { color: var(--teal); }
+  @media (max-width: 700px) { header, main { padding-left: 16px; padding-right: 16px; } .grid { grid-template-columns: 1fr; } .thumbs { grid-template-columns: 90px repeat(5, 1fr); } }
+</style>
+</head>
+<body>
+<header>
+  <h1><b>T</b>RINEXA · Character Lab</h1>
+  <span class="sub" id="logline"></span>
+</header>
+<main>
+  <h2>Storyboard · same story, same voice, five ways to show people</h2>
+  <div class="panel"><table id="sb"><thead><tr><th>Shot</th><th>Time</th><th>People on screen</th><th>App overlay</th><th>Narration</th></tr></thead><tbody></tbody></table></div>
+
+  <h2>Shot by shot</h2>
+  <div class="panel thumbs" id="thumbs"></div>
+
+  <h2>Results</h2>
+  <div class="bar"><button id="playall">▶ Play all together</button><button class="ghost" id="pauseall">Pause all</button><span class="sub">All five are 30.4s and share one soundtrack; each player has its own sound.</span></div>
+  <div class="grid" id="results" style="margin-top:14px"></div>
+</main>
+<script>
+const J = u => fetch(u + "?t=" + Date.now()).then(r => r.ok ? r.json() : null).catch(() => null);
+const exists = u => fetch(u + "?t=" + Date.now(), { method: "HEAD" }).then(r => r.ok).catch(() => false);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+let story, timing;
+const shown = {};
+
+async function init() {
+  [story, timing] = await Promise.all([J("storyline.json"), J("spine/timing.json")]);
+  document.getElementById("logline").textContent = story.logline;
+  const tb = document.querySelector("#sb tbody");
+  story.shots.forEach((s, i) => {
+    const t = timing.shots[i];
+    tb.insertAdjacentHTML("beforeend", `<tr><td><b>${i + 1} · ${esc(s.title)}</b></td><td class="t">${t.start.toFixed(1)}–${(t.start + t.dur).toFixed(1)}s</td><td>${esc(s.people)}</td><td>${esc(s.ui)}</td><td>“${esc(s.vo.replace("H R", "HR"))}”</td></tr>`);
+  });
+  const res = document.getElementById("results");
+  story.tracks.forEach(tr => res.insertAdjacentHTML("beforeend", `<div class="panel card" id="c-${tr.id}"><h3><span>${esc(tr.name)}</span><span class="pill s-queued" id="p-${tr.id}">queued</span></h3><div class="how">${esc(tr.how)}</div><div id="v-${tr.id}"><div class="wait">Waiting for this track…</div></div><div id="m-${tr.id}"></div></div>`));
+  refresh(); setInterval(refresh, 5000);
+}
+
+async function refresh() {
+  const th = document.getElementById("thumbs");
+  let h = `<div class="h"></div>` + story.shots.map((s, i) => `<div class="h">${i + 1} · ${esc(s.title)}</div>`).join("");
+  for (const tr of story.tracks) {
+    const st = await J(`tracks/${tr.id}/status.json`);
+    const state = st?.state || "queued";
+    const pill = document.getElementById("p-" + tr.id);
+    pill.textContent = state; pill.className = "pill s-" + state;
+    h += `<div class="h">${esc(tr.name)}</div>`;
+    for (const s of story.shots) {
+      const ok = await exists(`results/thumbs/${tr.id}-${s.id}.jpg`);
+      h += ok ? `<img src="results/thumbs/${tr.id}-${s.id}.jpg?v=${st?.version || 0}" alt="">` : `<div class="ph">—</div>`;
+    }
+    const vid = `results/${tr.id}.mp4`;
+    if (!shown[tr.id] && state === "done" && await exists(vid)) {
+      document.getElementById("v-" + tr.id).innerHTML = `<video controls preload="metadata" src="${vid}?v=${st?.version || 0}"></video>`;
+      shown[tr.id] = true;
+    } else if (state === "failed") {
+      document.getElementById("v-" + tr.id).innerHTML = `<div class="wait">Failed: ${esc(st.reason)}</div>`;
+    } else if (!shown[tr.id] && state === "running") {
+      document.getElementById("v-" + tr.id).innerHTML = `<div class="wait">Running: ${esc(st?.step || "")}</div>`;
+    }
+    const m = st ? `<dl>
+      <dt>Time on Mac</dt><dd>${st.minutes != null ? st.minutes + " min" : "—"}</dd>
+      <dt>Cost</dt><dd>$0 (local / free licence)</dd>
+      <dt>Tools</dt><dd>${esc(st.tools || "—")}</dd>
+      <dt>Licence</dt><dd>${esc(st.licence || "—")}${st.credits ? ` · <a href="tracks/${tr.id}/${esc(st.credits)}" target="_blank">credits</a>` : ""}</dd>
+    </dl>${(st.weaknesses || []).length ? `<ul>${st.weaknesses.map(w => `<li>${esc(w)}</li>`).join("")}</ul>` : ""}` : "";
+    document.getElementById("m-" + tr.id).innerHTML = m;
+  }
+  th.innerHTML = h;
+}
+document.getElementById("playall").onclick = () => document.querySelectorAll("#results video").forEach(v => { v.currentTime = 0; v.play(); });
+document.getElementById("pauseall").onclick = () => document.querySelectorAll("#results video").forEach(v => v.pause());
+init();
+</script>
+</body>
+</html>
